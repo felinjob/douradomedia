@@ -1,0 +1,102 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-body: 'Inter', sans-serif;
+
+  --color-bg-primary: var(--bg-primary);
+  --color-text-primary: var(--text-primary);
+  --color-accent: var(--accent);
+}
+
+:root {
+  /* Escala de Espaçamento 8pt */
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 32px;
+  --space-4: 64px;
+  --space-5: 128px;
+}
+
+/* Temas Cromáticos */
+:root, [data-theme="tactical"] {
+  --bg-primary: #000000;
+  --text-primary: #B0BEC5;
+  --accent: #FFB300;
+}
+
+[data-theme="abyssal"] {
+  --bg-primary: #040B16;
+  --text-primary: #F0F4F8;
+  --accent: #00E5FF;
+}
+
+[data-theme="organic"] {
+  --bg-primary: #FAFAFA;
+  --text-primary: #1A1A1A;
+  --accent: #FF5722;
+}
+
+/* Transição Suave e Global no HTML/Body */
+html {
+  color: var(--text-primary);
+  transition: color 0.6s ease;
+  font-family: var(--font-body);
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(
+    180deg,
+    #0B335C 0%,
+    #06203D 20%,
+    #041429 45%,
+    #020914 75%,
+    #000000 100%
+  );
+  background-attachment: scroll;
+}
+
+/* Utilitários HUD & Media */
+@layer utilities {
+  .aspect-video {
+    aspect-ratio: 16 / 9;
+  }
+  .aspect-reel {
+    aspect-ratio: 9 / 16;
+  }
+  
+  .hud-border {
+    border: 1px solid color-mix(in srgb, var(--text-primary) 20%, transparent);
+  }
+}
+
+/* Salvaguarda Estrita de Sensibilidade ao Movimento */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Cursor Visual Tático (apenas para mouse/desktop) */
+@media (pointer: fine) {
+  body {
+    cursor: crosshair;
+  }
+  a, button, [role="button"], input[type="submit"], input[type="button"], label, select {
+    cursor: pointer;
+  }
+}
+
+/* Desativar cursor customizado em touch */
+@media (pointer: coarse) {
+  body, a, button, [role="button"] {
+    cursor: auto;
+  }
+}

@@ -1,0 +1,1 @@
+function e(e=50){if(typeof navigator<`u`&&`vibrate`in navigator&&typeof navigator.vibrate==`function`)try{navigator.vibrate(e)}catch{}}export{e as t};

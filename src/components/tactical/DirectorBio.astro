@@ -1,0 +1,52 @@
+---
+import { Image } from 'astro:assets';
+import HudBadge from './HudBadge.astro';
+---
+
+<section class="py-24 md:py-32 px-4 md:px-8 border-t border-zinc-900/50" data-theme-section="tactical">
+  <div class="max-w-6xl mx-auto flex flex-col md:flex-row gap-12 lg:gap-24 items-center">
+    
+    <!-- Image Column -->
+    <div class="w-full md:w-1/2 relative group flex flex-col items-start">
+      <HudBadge text="DIRETOR & REALIZADOR" variant="default" class="mb-4" />
+      <div class="relative aspect-[3/4] max-w-md w-full hud-border overflow-hidden bg-zinc-900">
+        <!-- Crop Marks -->
+        <div class="absolute top-0 left-0 w-6 h-6 border-t border-l border-white/30 z-20 pointer-events-none transition-transform group-hover:-translate-x-1 group-hover:-translate-y-1"></div>
+        <div class="absolute top-0 right-0 w-6 h-6 border-t border-r border-white/30 z-20 pointer-events-none transition-transform group-hover:translate-x-1 group-hover:-translate-y-1"></div>
+        <div class="absolute bottom-0 left-0 w-6 h-6 border-b border-l border-white/30 z-20 pointer-events-none transition-transform group-hover:-translate-x-1 group-hover:translate-y-1"></div>
+        <div class="absolute bottom-0 right-0 w-6 h-6 border-b border-r border-white/30 z-20 pointer-events-none transition-transform group-hover:translate-x-1 group-hover:translate-y-1"></div>
+        
+        <Image 
+          src="https://images.unsplash.com/photo-1542038784456-1ea8e935640e?q=80&w=800&auto=format&fit=crop" 
+          width={800}
+          height={1067}
+          alt="Bruno Dourado - Filmmaker em Ação" 
+          class="w-full h-full object-cover grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700"
+        />
+        
+        <div class="absolute bottom-4 left-4 font-mono text-[10px] text-zinc-500 tracking-widest z-20">
+          SYS.OP.RECORDING
+        </div>
+      </div>
+    </div>
+
+    <!-- Text Column -->
+    <div class="w-full md:w-1/2 flex flex-col justify-center">
+      <h2 class="font-display text-3xl md:text-5xl lg:text-6xl font-bold uppercase tracking-tighter text-white leading-tight mb-8">
+        Da tensão da ação <br/>
+        <span class="text-zinc-500">ao silêncio do detalhe</span>
+      </h2>
+      
+      <p class="font-body text-zinc-400 text-lg leading-relaxed mb-10 max-w-xl">
+        Filmmaker com atuação focada em capturar a intensidade de ambientes extremos e o refinamento estético da imagem. Da imersão em apneia na pesca submarina ao movimento fluido de tecidos na moda feminina e à precisão visual da gastronomia autoral, atuo na concepção visual, direção de cena e finalização dos projetos.
+      </p>
+      
+      <div class="flex flex-col gap-4 font-mono text-xs md:text-sm text-zinc-500 tracking-widest uppercase border-l border-zinc-800 pl-6">
+        <p><span class="text-white">Base:</span> Rio de Janeiro &middot; Atuação Global</p>
+        <p><span class="text-white">Áreas:</span> Pesca Submarina &middot; Moda Feminina &middot; Gastronomia Autoral</p>
+        <p><span class="text-white">Padrão de Captura:</span> Resolução 4K &middot; Fluxo RAW</p>
+      </div>
+    </div>
+
+  </div>
+</section>

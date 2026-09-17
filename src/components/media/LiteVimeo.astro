@@ -1,0 +1,71 @@
+---
+interface Props {
+  videoId: string;
+  title: string;
+  aspect?: string;
+  posterUrl?: string;
+}
+
+const { videoId, title, aspect = '16/9', posterUrl = '/assets/placeholder.png' } = Astro.props;
+---
+
+<lite-vimeo 
+  data-videoid={videoId}
+  data-title={title}
+  class="relative block w-full bg-black cursor-pointer group hud-border overflow-hidden"
+  style={`aspect-ratio: ${aspect};`}
+  aria-label={`Play vimeo: ${title}`}
+  tabindex="0"
+>
+  <img 
+    src={posterUrl} 
+    alt={title} 
+    loading="lazy" 
+    decoding="async"
+    class="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-300" 
+  />
+  
+  <div class="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
+    <div class="border border-accent bg-bg-primary/80 text-accent px-4 py-2 font-mono text-sm tracking-widest uppercase transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[0.95] group-hover:bg-accent/10 group-hover:border-accent/80">
+      ▶ PLAY VIMEO_PRO
+    </div>
+  </div>
+</lite-vimeo>
+
+<script>
+  import { triggerHaptic } from '../../utils/haptics';
+
+  class LiteVimeo extends HTMLElement {
+    connectedCallback() {
+      this.addEventListener('click', this.activate);
+      this.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          this.activate();
+        }
+      });
+    }
+
+    activate() {
+      if (this.classList.contains('is-active')) return;
+      
+      triggerHaptic(50);
+      this.classList.add('is-active');
+      
+      const videoId = this.getAttribute('data-videoid');
+      const iframe = document.createElement('iframe');
+      
+      iframe.setAttribute('src', `https://player.vimeo.com/video/${videoId}?autoplay=1&muted=0&color=00E5FF&title=0&byline=0&portrait=0`);
+      iframe.setAttribute('frameborder', '0');
+      iframe.setAttribute('allow', 'autoplay; fullscreen; picture-in-picture');
+      iframe.setAttribute('allowfullscreen', 'true');
+      iframe.classList.add('absolute', 'inset-0', 'w-full', 'h-full', 'z-10');
+      
+      this.appendChild(iframe);
+    }
+  }
+
+  if (!customElements.get('lite-vimeo')) {
+    customElements.define('lite-vimeo', LiteVimeo);
+  }
+</script>

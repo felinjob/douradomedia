@@ -1,0 +1,158 @@
+---
+import ReelCard from './ReelCard.astro';
+import HudBadge from '../tactical/HudBadge.astro';
+
+interface Props {
+  projects: any[];
+  title?: string;
+}
+
+const { projects, title = "Shorts & Reels" } = Astro.props;
+
+if (projects.length === 0) return null;
+---
+
+<div class="mt-16 w-full">
+  <div class="mb-6 flex items-center justify-between">
+    <h3 class="font-display text-xl md:text-2xl font-bold uppercase tracking-widest text-zinc-300">{title}</h3>
+    <HudBadge text={`${projects.length} MEDIA_ASSETS`} variant="default" />
+  </div>
+
+  <div class="relative w-full block">
+    <div class="recents-viewport">
+      {projects.map((project, index) => (
+        <div class="recents-card">
+          <ReelCard 
+            reelId={project.data.media_id} 
+            title={project.data.title} 
+            posterUrl={project.data.cover_image} 
+          />
+          <div class="flex items-center justify-center mt-4 pointer-events-none">
+            <span class="font-mono text-xs text-zinc-600 tracking-[0.2em]">{String(index + 1).padStart(2, '0')} / {String(projects.length).padStart(2, '0')}</span>
+          </div>
+        </div>
+      ))}
+    </div>
+    
+    <style>
+      .recents-viewport {
+        overflow-x: scroll;
+        overflow-y: hidden;
+        display: flex;
+        align-items: center;
+        perspective: 1200px;
+        transform-style: preserve-3d;
+        scroll-snap-type: x mandatory;
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        padding-inline: calc(50vw - 140px);
+        gap: 1rem;
+        padding-block: 2rem;
+      }
+      
+      .recents-viewport::-webkit-scrollbar {
+        display: none;
+      }
+      
+      .recents-card {
+        flex-shrink: 0;
+        width: min(72vw, 280px);
+        aspect-ratio: 9 / 16;
+        scroll-snap-align: center;
+        will-change: transform, opacity, filter;
+        transform-origin: center center;
+        border-radius: 14px;
+        position: relative;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .recents-card {
+          transform: none !important;
+          opacity: 1 !important;
+          filter: none !important;
+        }
+      }
+    </style>
+  </div>
+</div>
+
+<script>
+  function initAndroid3DTrack(track: Element) {
+    const cards = Array.from(track.querySelectorAll('.recents-card')) as HTMLElement[];
+    if (!cards.length) return;
+
+    let ticking = false;
+
+    const updateSpatialMatrix = () => {
+      const trackRect = track.getBoundingClientRect();
+      if (!trackRect.width) return;
+
+      const trackCenter = trackRect.left + trackRect.width / 2;
+      const maxDistance = trackRect.width * 0.65;
+
+      cards.forEach(card => {
+        const cardRect = card.getBoundingClientRect();
+        const cardCenter = cardRect.left + cardRect.width / 2;
+        const delta = cardCenter - trackCenter;
+        const ratio = Math.max(-1, Math.min(1, delta / maxDistance));
+        const absRatio = Math.abs(ratio);
+
+        if (isNaN(absRatio)) return;
+
+        // Matriz espacial inspirada no seletor de janelas do Android:
+        const scale = 1 - (absRatio * 0.16);
+        const translateZ = -absRatio * 110;
+        const rotateY = -ratio * 20; // Rotação angular em direção ao centro focal
+        const opacity = 1 - (absRatio * 0.45);
+        const blur = absRatio * 1.5;
+
+        card.style.transform = `perspective(1200px) translateZ(${translateZ}px) rotateY(${rotateY}deg) scale(${scale})`;
+        card.style.opacity = `${opacity}`;
+        card.style.filter = `blur(${blur}px)`;
+        card.style.zIndex = `${Math.round((1 - absRatio) * 10)}`;
+
+        if (absRatio < 0.2) {
+          card.setAttribute('data-active', 'true');
+        } else {
+          card.removeAttribute('data-active');
+        }
+      });
+
+      ticking = false;
+    };
+
+    track.addEventListener('scroll', () => {
+      if (!ticking) {
+        window.requestAnimationFrame(updateSpatialMatrix);
+        ticking = true;
+      }
+    }, { passive: true });
+
+    window.addEventListener('resize', () => window.requestAnimationFrame(updateSpatialMatrix));
+
+    // Event listener para clique (Snap to center) - mantido para ergonomia
+    cards.forEach(card => {
+      card.addEventListener('click', (e) => {
+        const zIndex = parseInt(card.style.zIndex || '0', 10);
+        if (zIndex < 10) {
+          e.preventDefault();
+          e.stopPropagation();
+          card.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+          if (window.navigator && window.navigator.vibrate) navigator.vibrate(20);
+        }
+      });
+    });
+
+    updateSpatialMatrix();
+    setTimeout(updateSpatialMatrix, 150);
+  }
+
+  const runAllTracks = () => {
+    document.querySelectorAll('.recents-viewport').forEach(initAndroid3DTrack);
+  };
+
+  runAllTracks();
+  document.addEventListener('astro:page-load', runAllTracks);
+</script>

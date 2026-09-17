@@ -1,0 +1,200 @@
+---
+interface Props {
+  title: string;
+  duration?: string;
+  posterUrl?: string;
+  reelId?: string;
+}
+
+const { title, duration = "00:15", posterUrl = "/assets/placeholder.png", reelId = "fake_reel" } = Astro.props;
+---
+
+<tactical-reel 
+  data-reelid={reelId}
+  data-poster={posterUrl}
+  class="reel-card-wrapper relative block w-full max-w-[380px] bg-black cursor-pointer hud-border overflow-hidden group mx-auto"
+  style="aspect-ratio: 9/16;"
+>
+  <template id="reel-template">
+    <style>
+      :host {
+        display: block;
+        position: relative;
+        width: 100%;
+        height: 100%;
+        background: #000;
+        overflow: hidden;
+      }
+      .poster {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0.8;
+        transition: opacity 0.3s;
+      }
+      :host(:hover) .poster {
+        opacity: 1;
+      }
+      .overlay {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: 16px;
+        background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+        pointer-events: none;
+      }
+      .title {
+        font-family: sans-serif;
+        font-weight: bold;
+        color: #fff;
+        margin: 0 0 8px 0;
+        font-size: 1.1rem;
+      }
+      .meta {
+        font-family: monospace;
+        color: #00E5FF;
+        font-size: 0.75rem;
+        letter-spacing: 0.1em;
+      }
+      .play-btn {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        border: 1px solid #FFB300;
+        background: rgba(0,0,0,0.8);
+        color: #FFB300;
+        padding: 10px 18px;
+        font-family: monospace;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        pointer-events: none;
+        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        z-index: 20;
+      }
+      :host(:hover) .play-btn {
+        padding: 8px 16px;
+        background: rgba(255, 179, 0, 0.1);
+      }
+      .crop-mark {
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        z-index: 15;
+        pointer-events: none;
+        transition: transform 0.3s;
+      }
+      .top-left { top: 0; left: 0; border-right: none; border-bottom: none; }
+      .top-right { top: 0; right: 0; border-left: none; border-bottom: none; }
+      .bottom-left { bottom: 0; left: 0; border-right: none; border-top: none; }
+      .bottom-right { bottom: 0; right: 0; border-left: none; border-top: none; }
+      
+      :host(:hover) .top-left { transform: translate(-2px, -2px); }
+      :host(:hover) .top-right { transform: translate(2px, -2px); }
+      :host(:hover) .bottom-left { transform: translate(-2px, 2px); }
+      :host(:hover) .bottom-right { transform: translate(2px, 2px); }
+      iframe {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        border: 0;
+        z-index: 10;
+        background: #000;
+      }
+      
+      /* Block interaction if inactive */
+      :host-context(.is-inactive) .play-btn {
+        display: none;
+      }
+    </style>
+    
+    <img class="poster w-full h-full object-cover pointer-events-none" src={posterUrl} alt={title} loading="lazy" decoding="async" />
+    
+    <div class="crop-mark top-left"></div>
+    <div class="crop-mark top-right"></div>
+    <div class="crop-mark bottom-left"></div>
+    <div class="crop-mark bottom-right"></div>
+    
+    <div class="overlay">
+      <h3 class="title"></h3>
+      <span class="meta"></span>
+    </div>
+    
+    <div class="play-btn">▶ REEL</div>
+  </template>
+
+  <!-- Metadados para popular o Shadow DOM -->
+  <span class="sr-only reel-title hidden">{title}</span>
+  <span class="sr-only reel-meta hidden">DUR: {duration} | ID: {reelId}</span>
+</tactical-reel>
+
+<script>
+  import { triggerHaptic } from '../../utils/haptics';
+
+  class TacticalReel extends HTMLElement {
+    private _shadow: ShadowRoot;
+
+    constructor() {
+      super();
+      // Criar shadow root mode: 'closed' protege contra CSS global e scripts de terceiros
+      this._shadow = this.attachShadow({ mode: 'closed' });
+    }
+
+    connectedCallback() {
+      const template = this.querySelector('template#reel-template') as HTMLTemplateElement;
+      if (!template) return;
+
+      const content = template.content.cloneNode(true) as DocumentFragment;
+      
+      // We don't need to manually set the poster src here anymore, Astro interpolates it.
+      // But we can check if it exists:
+      const poster = content.querySelector('.poster') as HTMLImageElement;
+      if (poster && poster.getAttribute('src') === '') {
+          poster.src = this.getAttribute('data-poster') || '';
+      }
+
+      const titleEl = content.querySelector('.title');
+      const sourceTitle = this.querySelector('.reel-title');
+      if (titleEl && sourceTitle) titleEl.textContent = sourceTitle.textContent;
+
+      const metaEl = content.querySelector('.meta');
+      const sourceMeta = this.querySelector('.reel-meta');
+      if (metaEl && sourceMeta) metaEl.textContent = sourceMeta.textContent;
+
+      this._shadow.appendChild(content);
+
+      this.addEventListener('click', this.activate.bind(this));
+    }
+
+    activate() {
+      if (this.hasAttribute('data-active')) return;
+      
+      const reelItem = this.closest('.reel-item');
+      if (reelItem && reelItem.classList.contains('is-inactive')) {
+        return;
+      }
+      
+      triggerHaptic(50);
+      this.setAttribute('data-active', 'true');
+      
+      const reelId = this.getAttribute('data-reelid');
+      const iframe = document.createElement('iframe');
+      
+      iframe.setAttribute('src', `https://www.instagram.com/p/${reelId}/embed`);
+      iframe.setAttribute('scrolling', 'no');
+      iframe.setAttribute('allowtransparency', 'true');
+      
+      this._shadow.appendChild(iframe);
+    }
+  }
+
+  if (!customElements.get('tactical-reel')) {
+    customElements.define('tactical-reel', TacticalReel);
+  }
+</script>

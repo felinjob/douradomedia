@@ -1,0 +1,167 @@
+---
+---
+
+<style>
+  html {
+    scroll-behavior: smooth;
+  }
+</style>
+
+<div id="dock-wrapper" class="fixed bottom-6 left-1/2 z-50 pointer-events-auto" style="transform: translateX(-50%) translateY(0) scale(1); opacity: 1; transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;">
+  <nav class="pointer-events-auto bg-black/40 backdrop-blur-md border border-zinc-900/60 rounded-full p-1 flex items-center gap-1 shadow-lg" id="section-dock">
+    
+    <a href="#spearfishing" aria-label="Ir para Pesca Submarina" class="dock-btn group relative flex items-center justify-center w-10 h-10 rounded-full transition-all duration-300 hover:bg-zinc-800/50 active:scale-95" data-target="spearfishing">
+      <!-- Spearfishing Icon (Crosshair / Harpoon) -->
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-zinc-500 group-[.active]:text-cyan-400 group-hover:text-cyan-300 transition-colors">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="22" y1="12" x2="18" y2="12"></line>
+        <line x1="6" y1="12" x2="2" y2="12"></line>
+        <line x1="12" y1="6" x2="12" y2="2"></line>
+        <line x1="12" y1="22" x2="12" y2="18"></line>
+        <circle cx="12" cy="12" r="2"></circle>
+      </svg>
+    </a>
+
+    <a href="#gastronomy" aria-label="Ir para Gastronomia" class="dock-btn group relative flex items-center justify-center w-10 h-10 rounded-full transition-all duration-300 hover:bg-zinc-800/50 active:scale-95" data-target="gastronomy">
+      <!-- Gastronomy Icon (Flame) -->
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-zinc-500 group-[.active]:text-orange-500 group-hover:text-orange-400 transition-colors">
+        <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path>
+      </svg>
+    </a>
+
+    <a href="#fashion" aria-label="Ir para Moda" class="dock-btn group relative flex items-center justify-center w-10 h-10 rounded-full transition-all duration-300 hover:bg-zinc-800/50 active:scale-95" data-target="fashion">
+      <!-- Fashion Icon (Needle / Thread) -->
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-zinc-500 group-[.active]:text-zinc-200 group-hover:text-zinc-300 transition-colors">
+        <path d="M14.5 2a2.5 2.5 0 0 0-5 0v9a2.5 2.5 0 0 1 5 0V2z"></path>
+        <path d="M12 13.5V22"></path>
+      </svg>
+    </a>
+
+    <div class="w-px h-6 bg-zinc-800/60 mx-1"></div>
+
+    <a 
+      href="https://wa.me/5511999999999?text=Ol%C3%A1%20Bruno%2C%20vi%20o%20seu%20portf%C3%B3lio%20e%20gostaria%20de%20um%20or%C3%A7amento." 
+      target="_blank" 
+      rel="noopener noreferrer"
+      aria-label="Contato via WhatsApp" 
+      class="dock-btn group relative flex items-center justify-center w-10 h-10 rounded-full transition-all duration-300 hover:bg-zinc-800/50 active:scale-95"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-zinc-400 group-hover:text-zinc-100 transition-colors">
+        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+      </svg>
+    </a>
+  </nav>
+</div>
+
+<script>
+  function initDock() {
+    const buttons = document.querySelectorAll('.dock-btn');
+    const wrapper = document.getElementById('dock-wrapper');
+    
+    // Haptic Feedback on Click
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (window.navigator && window.navigator.vibrate) {
+          window.navigator.vibrate(30);
+        }
+      });
+    });
+
+    // Observer to sync active state based on scroll
+    const sections = ['spearfishing', 'gastronomy', 'fashion'].map(id => document.getElementById(id)).filter(Boolean);
+    
+    if (sections.length > 0) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const id = entry.target.id;
+            buttons.forEach(btn => {
+              if (btn.getAttribute('data-target') === id) {
+                btn.classList.add('active');
+                btn.setAttribute('aria-current', 'true');
+              } else {
+                btn.classList.remove('active');
+                btn.removeAttribute('aria-current');
+              }
+            });
+          }
+        });
+      }, { threshold: 0.15, rootMargin: "-30% 0px -30% 0px" });
+
+      sections.forEach(section => observer.observe(section));
+    }
+
+    // Auto-hide logic (Scroll & Video)
+    let isVideoPlaying = false;
+    let lastScrollY = window.scrollY;
+    let ticking = false;
+    let scrollTimeout;
+
+    function hideDock() {
+      if (wrapper) {
+        wrapper.style.opacity = '0';
+        wrapper.style.transform = 'translateX(-50%) translateY(100%) scale(0.95)';
+        wrapper.style.pointerEvents = 'none';
+      }
+    }
+
+    function showDock() {
+      if (wrapper && !isVideoPlaying) {
+        wrapper.style.opacity = '1';
+        wrapper.style.transform = 'translateX(-50%) translateY(0) scale(1)';
+        wrapper.style.pointerEvents = 'auto';
+      }
+    }
+
+    function onScroll() {
+      const currentScrollY = window.scrollY;
+      
+      if (isVideoPlaying && Math.abs(currentScrollY - lastScrollY) > 300) {
+        isVideoPlaying = false; 
+      }
+      
+      if (!isVideoPlaying) {
+        if (currentScrollY > lastScrollY && currentScrollY > 50) {
+          // Scrolling down
+          hideDock();
+        } else {
+          // Scrolling up
+          showDock();
+        }
+      }
+      
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        if (!isVideoPlaying) showDock();
+      }, 600);
+      
+      lastScrollY = currentScrollY;
+      ticking = false;
+    }
+
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          onScroll();
+        });
+        ticking = true;
+      }
+    }, { passive: true });
+
+    // Ocultar ao clicar/reproduzir vídeos (Módulo LiteYouTube/LiteVimeo e Reels)
+    document.addEventListener('click', (e) => {
+      const target = e.target;
+      if (target && typeof target.closest === 'function') {
+        const isVideo = target.closest('lite-youtube') || target.closest('lite-vimeo') || target.closest('[data-media-type="video"]');
+        if (isVideo) {
+          isVideoPlaying = true;
+          hideDock();
+        }
+      }
+    });
+  }
+
+  // Executar no carregamento inicial e nas transições de página (se existirem)
+  initDock();
+  document.addEventListener('astro:page-load', initDock);
+</script>

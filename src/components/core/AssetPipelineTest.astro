@@ -1,0 +1,37 @@
+---
+import { Image, Picture } from 'astro:assets';
+import myImage from '../../assets/placeholder.png';
+---
+
+<section class="max-w-4xl mx-auto p-4 border border-zinc-800 rounded-lg bg-zinc-900 my-10">
+  <h2 class="text-xl font-bold text-zinc-100 mb-4">Teste de Pipeline de Assets (Sharp)</h2>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="bg-black p-4 rounded-md border border-zinc-800">
+      <h3 class="text-zinc-400 mb-2 text-sm uppercase font-mono tracking-wider">Otimização AVIF Fixa</h3>
+      <!-- Aspect ratio explícito para Zero CLS -->
+      <Image 
+        src={myImage} 
+        alt="Imagem de teste processada via Sharp" 
+        width={400} 
+        height={300} 
+        format="avif"
+        class="w-full h-auto aspect-video object-cover rounded shadow-lg opacity-80 hover:opacity-100 transition-opacity"
+      />
+    </div>
+    <div class="bg-black p-4 rounded-md border border-zinc-800">
+      <h3 class="text-zinc-400 mb-2 text-sm uppercase font-mono tracking-wider">Srcset Dinâmico (Picture)</h3>
+      <Picture 
+        src={myImage} 
+        alt="Imagem de teste com Múltiplos Formatos" 
+        formats={['avif', 'webp']} 
+        fallbackFormat="png"
+        widths={[240, 540, 720]}
+        sizes="(max-width: 768px) 100vw, 50vw"
+        class="w-full h-auto aspect-video object-cover rounded shadow-lg opacity-80 hover:opacity-100 transition-opacity"
+      />
+    </div>
+  </div>
+  <p class="text-zinc-500 text-xs mt-4 font-mono">
+    [Ghost-Architect]: Se as imagens renderizarem, o pipeline nativo Astro com Sharp está configurado para AVIF/WebP com Zero CLS.
+  </p>
+</section>

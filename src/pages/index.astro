@@ -1,0 +1,157 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import HeroPlayer from '../components/media/HeroPlayer.astro';
+import ProjectCard from '../components/tactical/ProjectCard.astro';
+import TacticalContainer from '../components/tactical/TacticalContainer.astro';
+import HudBadge from '../components/tactical/HudBadge.astro';
+import SocialProof from '../components/tactical/SocialProof.astro';
+import ContactFooter from '../components/tactical/ContactFooter.astro';
+import ReelsTrack from '../components/media/ReelsTrack.astro';
+import DirectorBio from '../components/tactical/DirectorBio.astro';
+import CaseStudyCard from '../components/tactical/CaseStudyCard.astro';
+
+const spearfishingProjects = await getCollection('spearfishing');
+const sfHorizontal = spearfishingProjects.filter(p => p.data.media_type?.toLowerCase() !== 'reel');
+const sfVertical = spearfishingProjects.filter(p => p.data.media_type?.toLowerCase() === 'reel');
+
+const gastronomyProjects = await getCollection('gastronomy');
+const gastHorizontal = gastronomyProjects.filter(p => p.data.media_type?.toLowerCase() !== 'reel');
+const gastVertical = gastronomyProjects.filter(p => p.data.media_type?.toLowerCase() === 'reel');
+
+const fashionProjects = await getCollection('fashion');
+const fashionHorizontal = fashionProjects.filter(p => p.data.media_type?.toLowerCase() !== 'reel');
+const fashionVertical = fashionProjects.filter(p => p.data.media_type?.toLowerCase() === 'reel');
+
+console.log(`[SSR_REELS_COUNT] Spearfishing: ${sfVertical.length} reels encontrados.`);
+console.log(`[SSR_REELS_COUNT] Gastronomia: ${gastVertical.length} reels encontrados.`);
+console.log(`[SSR_REELS_COUNT] Fashion: ${fashionVertical.length} reels encontrados.`);
+
+---
+
+
+
+<BaseLayout title="Bruno Dourado | Diretor de Fotografia">
+  <!-- Hero Section -->
+  <HeroPlayer title="Showreel Dourado">
+    <div class="relative z-30">
+      <h1 class="font-display text-5xl md:text-7xl font-black text-white uppercase tracking-tighter">
+        Bruno Dourado
+      </h1>
+      <p class="font-mono text-accent text-lg mt-2">DIRECTOR OF PHOTOGRAPHY / FILMMAKER</p>
+    </div>
+  </HeroPlayer>
+
+  <!-- Spearfishing Section (Abyssal) -->
+  <section id="spearfishing" data-theme-section="abyssal" class="pt-16 md:pt-24 px-4 md:px-8">
+    <div class="max-w-7xl mx-auto pb-16 md:pb-24">
+      <header class="mb-12">
+        <HudBadge text="AXIS 01" variant="abyssal" class="mb-2" />
+        <h2 class="font-display text-4xl font-bold uppercase tracking-widest text-text-primary">Spearfishing</h2>
+      </header>
+      <div class="flex flex-col items-center justify-center gap-16 xl:gap-24 w-full">
+        {sfHorizontal.map((project) => (
+          <ProjectCard project={project} collectionType="spearfishing" />
+        ))}
+      </div>
+      {sfVertical.length > 0 && <ReelsTrack projects={sfVertical} title="Shorts & Reels" />}
+    </div>
+
+    <!-- Calibration Tick Divider -->
+    <div class="w-full flex items-center justify-center pb-8 opacity-20" aria-hidden="true">
+      <div class="h-4 border-l border-accent mx-2"></div>
+      <div class="h-2 border-l border-accent mx-2"></div>
+      <div class="h-2 border-l border-accent mx-2"></div>
+      <div class="h-4 border-l border-accent mx-2"></div>
+      <div class="h-2 border-l border-accent mx-2"></div>
+      <div class="h-2 border-l border-accent mx-2"></div>
+      <div class="h-4 border-l border-accent mx-2"></div>
+    </div>
+  </section>
+
+  <!-- Gastronomy Section (Organic) -->
+  <section id="gastronomy" data-theme-section="organic" class="pt-16 md:pt-24 px-4 md:px-8">
+    <div class="max-w-7xl mx-auto pb-16 md:pb-24">
+      <header class="mb-12">
+        <HudBadge text="AXIS 02" variant="organic" class="mb-2" />
+        <h2 class="font-display text-4xl font-bold uppercase tracking-widest text-text-primary">Gastronomy</h2>
+      </header>
+      <div class="flex flex-col items-center justify-center gap-16 xl:gap-24 w-full">
+        {gastHorizontal.map((project) => (
+          <ProjectCard project={project} collectionType="gastronomy" />
+        ))}
+      </div>
+      {gastVertical.length > 0 && <ReelsTrack projects={gastVertical} title="Shorts & Reels" />}
+    </div>
+
+    <!-- Calibration Tick Divider -->
+    <div class="w-full flex items-center justify-center pb-8 opacity-20" aria-hidden="true">
+      <div class="h-4 border-l border-accent mx-2"></div>
+      <div class="h-2 border-l border-accent mx-2"></div>
+      <div class="h-2 border-l border-accent mx-2"></div>
+      <div class="h-4 border-l border-accent mx-2"></div>
+      <div class="h-2 border-l border-accent mx-2"></div>
+      <div class="h-2 border-l border-accent mx-2"></div>
+      <div class="h-4 border-l border-accent mx-2"></div>
+    </div>
+  </section>
+
+  <!-- Fashion Section (Tactical / Editorial) -->
+  <section id="fashion" data-theme-section="tactical" class="pt-16 pb-24 md:pt-24 md:pb-32 px-4 md:px-8">
+    <div class="max-w-7xl mx-auto">
+      <header class="mb-12">
+        <HudBadge text="AXIS 03" variant="tactical" class="mb-2" />
+        <h2 class="font-display text-4xl font-bold uppercase tracking-widest text-zinc-100">Fashion & Editorial</h2>
+      </header>
+      <div class="flex flex-col items-center justify-center gap-16 xl:gap-24 w-full">
+        {fashionHorizontal.map((project) => (
+          <ProjectCard project={project} collectionType="fashion" />
+        ))}
+      </div>
+      {fashionVertical.length > 0 && <ReelsTrack projects={fashionVertical} title="Shorts & Reels" />}
+    </div>
+  </section>
+
+  <!-- Director Dossier / Bio -->
+  <DirectorBio />
+
+  <!-- Behind the Lens (BTS) -->
+  <section data-theme-section="tactical" class="py-24 px-4 md:px-8 border-t border-zinc-900/50">
+    <div class="max-w-7xl mx-auto">
+      <header class="mb-12">
+        <HudBadge text="CASE STUDIES" variant="default" class="mb-2" />
+        <h2 class="font-display text-4xl font-bold uppercase tracking-widest text-zinc-100">Behind The Lens</h2>
+      </header>
+      
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <CaseStudyCard 
+          category="Pesca Submarina"
+          title="Expedição Abissal: Captação em Apneia a -30m"
+          challenge="Gerenciar a atenuação drástica de luz natural nas profundezas enquanto se estabiliza a câmera sem uso de cilindros de oxigênio (SCUBA)."
+          solution="Utilização de housing focado em ergonomia negativa para contra-balançar a flutuabilidade. A direção apostou no uso de luz orgânica para enfatizar a textura brutalista do abismo."
+        />
+        
+        <CaseStudyCard 
+          category="Gastronomia Autoral"
+          title="Fogo & Origem: A Estética da Brasa"
+          challenge="Capturar micro-detalhes de cocção e labaredas em ambientes de luz baixíssima e contrastante, suportando calor extremo."
+          solution="Enquadramentos macro rigorosos e iluminação pontual direcional. O foco narrativo recaiu sobre o contraste tátil das texturas rústicas contra o movimento etéreo do fogo."
+        />
+        
+        <CaseStudyCard 
+          category="Moda Editorial"
+          title="Maison Cápsula: Fluidez Têxtil e Luz Difusa"
+          challenge="Garantir que tecidos finos e esvoaçantes não perdessem a gradação tonal em fundos brancos sem criar super-exposição (clipping)."
+          solution="Adoção de luz difusa envolvente e direção focada na coreografia natural do modelo. O resultado é um movimento têxtil contínuo com separação perfeita de tons."
+        />
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Social Proof -->
+  <SocialProof />
+
+  <!-- Conversion Footer -->
+  <ContactFooter />
+</BaseLayout>

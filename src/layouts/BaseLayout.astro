@@ -1,0 +1,29 @@
+---
+import '@fontsource/inter';
+import '@fontsource/jetbrains-mono';
+import '@fontsource/space-grotesk';
+import '../styles/tokens.css';
+
+import SeoHead from '../components/core/SeoHead.astro';
+import SectionDock from '../components/tactical/SectionDock.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title = "Tactical AV Platform", description } = Astro.props;
+---
+
+<html lang="pt-BR" data-theme="tactical">
+  <head>
+    <SeoHead title={title} description={description} />
+  </head>
+  <body class="min-h-screen selection:bg-accent selection:text-black">
+    <slot />
+    
+    <SectionDock />
+    
+    <script src="../scripts/theme-observer.ts"></script>
+  </body>
+</html>

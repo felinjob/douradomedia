@@ -1,0 +1,59 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import HeroPlayer from '../components/media/HeroPlayer.astro';
+import LiteYouTube from '../components/media/LiteYouTube.astro';
+import LiteVimeo from '../components/media/LiteVimeo.astro';
+import ReelCard from '../components/media/ReelCard.astro';
+import TacticalContainer from '../components/tactical/TacticalContainer.astro';
+import HudBadge from '../components/tactical/HudBadge.astro';
+---
+
+<BaseLayout title="Media Engine Test">
+  <HeroPlayer title="Cinematic Showreel">
+    <div class="relative z-30">
+      <HudBadge text="HERO MODULE" variant="tactical" class="mb-4" />
+      <h1 class="font-display text-4xl md:text-6xl font-black text-white">Media Engine Test</h1>
+      <p class="text-white/80 max-w-lg mt-4 font-mono text-sm">
+        Zero CLS. Shadow DOM isolation. Facade pattern.<br/> 
+        Native HTML5 video underneath HUD calibration lines.
+      </p>
+    </div>
+  </HeroPlayer>
+
+  <main class="py-16 px-4 md:px-8 max-w-7xl mx-auto space-y-16">
+    <section>
+      <HudBadge text="WIDESCREEN FACADES" variant="default" class="mb-8" />
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <TacticalContainer>
+          <h2 class="font-display text-2xl mb-4 text-text-primary">YouTube Lite</h2>
+          <!-- Mock YouTube ID para Teste (Sintel) -->
+          <LiteYouTube videoId="eRsGyueVLvQ" title="Sintel - Third Party Render" />
+        </TacticalContainer>
+
+        <TacticalContainer>
+          <h2 class="font-display text-2xl mb-4 text-text-primary">Vimeo Pro Lite</h2>
+          <!-- Mock Vimeo ID -->
+          <LiteVimeo videoId="76979871" title="Vimeo Facade Test" />
+        </TacticalContainer>
+      </div>
+    </section>
+
+    <section>
+      <HudBadge text="SHADOW DOM REELS" variant="organic" class="mb-8" />
+      <TacticalContainer class="bg-black/50">
+        <div class="flex flex-col md:flex-row gap-8 justify-center items-center">
+          <ReelCard 
+            title="UNDERWATER DIVE" 
+            duration="00:15" 
+            reelId="Cq3_example" 
+          />
+          <ReelCard 
+            title="MACRO CULINARY" 
+            duration="00:22" 
+            reelId="Cq4_example" 
+          />
+        </div>
+      </TacticalContainer>
+    </section>
+  </main>
+</BaseLayout>

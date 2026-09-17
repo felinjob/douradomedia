@@ -1,0 +1,64 @@
+---
+import { Image } from 'astro:assets';
+import placeholderImg from '../../assets/placeholder.png';
+
+interface Props {
+  videoUrl?: string;
+  posterImg?: any;
+  title?: string;
+}
+
+const { 
+  videoUrl = '/assets/hero-placeholder.mp4', 
+  posterImg = placeholderImg,
+  title = 'Hero Video'
+} = Astro.props;
+---
+
+<section class="relative w-full h-screen min-h-[600px] flex flex-col justify-center items-center overflow-hidden">
+  
+  <!-- Overlay Gradient e Linha Central -->
+  <div class="absolute inset-0 z-20 pointer-events-none bg-gradient-to-t from-transparent via-transparent to-transparent"></div>
+  
+  <!-- Contêiner do Vídeo Principal -->
+  <div class="absolute inset-0 w-full h-full z-10 flex items-center justify-center">
+
+  <!-- Contêiner do Vídeo Principal (Full Screen) -->
+  <div class="absolute inset-0 z-0">
+      <Image 
+        src={posterImg} 
+        alt={title}
+        class="w-full h-full object-cover opacity-60"
+        format="avif"
+        fallbackFormat="webp"
+        loading="eager"
+        decoding="sync"
+      />
+    </div>
+
+    <!-- HTML5 Video -->
+    <video 
+      src={videoUrl} 
+      autoplay 
+      muted 
+      loop 
+      playsinline 
+      class="absolute inset-0 w-full h-full object-cover z-10 opacity-70 mix-blend-screen"
+      aria-hidden="true"
+    ></video>
+
+    <!-- Overlay Gradient Inferior para transição suave com a página -->
+    <div class="absolute inset-0 z-20 pointer-events-none bg-gradient-to-t from-black via-black/20 to-transparent"></div>
+    
+    <!-- Crosshair central sutil -->
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 opacity-20 pointer-events-none z-20 flex items-center justify-center">
+      <div class="w-[1px] h-full bg-white"></div>
+      <div class="absolute w-full h-[1px] bg-white"></div>
+    </div>
+
+    <!-- Content Area centralizada -->
+    <div class="relative z-30 flex flex-col items-center justify-center text-center h-full p-8 md:p-16 w-full pt-32">
+      <slot />
+    </div>
+  </div>
+</section>

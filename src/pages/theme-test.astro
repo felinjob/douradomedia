@@ -1,0 +1,50 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import TacticalContainer from '../components/tactical/TacticalContainer.astro';
+import HudBadge from '../components/tactical/HudBadge.astro';
+import TacticalButton from '../components/tactical/TacticalButton.astro';
+---
+
+<BaseLayout title="Theme Engine Test">
+  <!-- Abyssal Section -->
+  <section data-theme-section="abyssal" class="min-h-screen flex flex-col items-center justify-center p-4">
+    <TacticalContainer class="max-w-2xl w-full">
+      <HudBadge text="ABYSSAL" variant="abyssal" class="mb-4" />
+      <h1 class="font-display text-4xl md:text-6xl font-black mb-4">Deep Water Ops</h1>
+      <p class="font-body text-lg opacity-80 mb-8 max-w-lg">
+        Testing the Abyssal theme transition. Scrolling down will trigger the observer and gracefully change the global root variables.
+      </p>
+      <TacticalButton text="Engage" />
+    </TacticalContainer>
+    <div class="mt-20 animate-pulse opacity-50">
+      <HudBadge text="SCROLL DOWN" variant="abyssal" />
+    </div>
+  </section>
+
+  <!-- Organic Section -->
+  <section data-theme-section="organic" class="min-h-screen flex flex-col items-center justify-center p-4">
+    <TacticalContainer class="max-w-2xl w-full">
+      <HudBadge text="ORGANIC" variant="organic" class="mb-4" />
+      <h1 class="font-display text-4xl md:text-6xl font-black mb-4">Surface Terrain</h1>
+      <p class="font-body text-lg opacity-80 mb-8 max-w-lg">
+        Testing the Organic theme transition, moving to lighter tones and vibrant high-contrast accents.
+      </p>
+      <TacticalButton text="Explore" />
+    </TacticalContainer>
+    <div class="mt-20 animate-pulse opacity-50">
+      <HudBadge text="SCROLL DOWN" variant="organic" />
+    </div>
+  </section>
+
+  <!-- Tactical Section -->
+  <section data-theme-section="tactical" class="min-h-screen flex items-center justify-center p-4">
+    <TacticalContainer class="max-w-2xl w-full">
+      <HudBadge text="TACTICAL" variant="tactical" class="mb-4" />
+      <h1 class="font-display text-4xl md:text-6xl font-black mb-4">Night Vision</h1>
+      <p class="font-body text-lg opacity-80 mb-8 max-w-lg">
+        Testing the Tactical theme transition, reverting to high contrast dark mode for equipment and night operations.
+      </p>
+      <TacticalButton text="Deploy" />
+    </TacticalContainer>
+  </section>
+</BaseLayout>

@@ -1,0 +1,144 @@
+---
+import TacticalContainer from './TacticalContainer.astro';
+import HudBadge from './HudBadge.astro';
+import LiteYouTube from '../media/LiteYouTube.astro';
+import LiteVimeo from '../media/LiteVimeo.astro';
+import ReelCard from '../media/ReelCard.astro';
+
+interface Props {
+  project: any;
+  collectionType: 'spearfishing' | 'gastronomy' | 'fashion';
+}
+
+const { project, collectionType } = Astro.props;
+const data = project.data;
+
+let badgeVariant: 'default' | 'abyssal' | 'organic' | 'tactical' = 'default';
+if (collectionType === 'spearfishing') badgeVariant = 'abyssal';
+if (collectionType === 'gastronomy') badgeVariant = 'organic';
+if (collectionType === 'fashion') badgeVariant = 'tactical';
+
+const isFashion = collectionType === 'fashion';
+---
+
+{isFashion ? (
+  <div class="mb-16 flex flex-col items-center justify-center w-full">
+    <div class="w-full max-w-5xl mx-auto flex flex-col">
+      <header class="flex flex-col mb-6 gap-2">
+        <h3 class="font-sans text-2xl md:text-3xl font-light text-zinc-100 tracking-wide text-center">
+          {data.title}
+        </h3>
+        
+        <div class="flex flex-wrap justify-center gap-2 mt-2">
+          {data.brand && (
+            <span class="text-[10px] md:text-xs uppercase tracking-widest text-zinc-400 border border-zinc-800 px-2 py-1">{data.brand}</span>
+          )}
+          <div class="hidden md:flex gap-2">
+            {data.fabrics_highlight && data.fabrics_highlight.map((fabric: string) => (
+              <span class="text-xs uppercase tracking-widest text-zinc-600 px-2 py-1">{fabric}</span>
+            ))}
+          </div>
+        </div>
+      </header>
+
+      <div class="relative w-full max-w-5xl mx-auto overflow-hidden animate-in fade-in duration-1000 flex items-center justify-center group">
+        <!-- Crop Marks (Cantoneiras) -->
+        <div class="absolute top-0 left-0 w-4 h-4 border-t border-l border-zinc-500/40 z-30 pointer-events-none transition-transform group-hover:-translate-x-1 group-hover:-translate-y-1"></div>
+        <div class="absolute top-0 right-0 w-4 h-4 border-t border-r border-zinc-500/40 z-30 pointer-events-none transition-transform group-hover:translate-x-1 group-hover:-translate-y-1"></div>
+        <div class="absolute bottom-0 left-0 w-4 h-4 border-b border-l border-zinc-500/40 z-30 pointer-events-none transition-transform group-hover:-translate-x-1 group-hover:translate-y-1"></div>
+        <div class="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-zinc-500/40 z-30 pointer-events-none transition-transform group-hover:translate-x-1 group-hover:translate-y-1"></div>
+
+        <div class="w-full rounded-sm overflow-hidden">
+          {data.media_type === 'youtube' && (
+            <LiteYouTube videoId={data.media_id} title={data.title} />
+          )}
+          
+          {data.media_type === 'vimeo' && (
+            <LiteVimeo videoId={data.media_id} title={data.title} />
+          )}
+          
+          {data.media_type === 'reel' && (
+            <div class="w-full max-w-sm mx-auto">
+              <ReelCard reelId={data.media_id} title={data.title} posterUrl={data.cover_image} />
+            </div>
+          )}
+          
+          {data.media_type === 'local' && (
+            <div class="aspect-video bg-zinc-900 flex items-center justify-center">
+              <span class="font-mono text-zinc-500 text-sm">LOCAL MEDIA: {data.media_id}</span>
+            </div>
+          )}
+        </div>
+      </div>
+      
+      {data.description && (
+        <p class="mt-6 text-sm md:text-base leading-relaxed text-zinc-400 font-light text-center max-w-4xl mx-auto">
+          {data.description}
+        </p>
+      )}
+    </div>
+  </div>
+) : (
+  <div class="w-full flex flex-col items-center justify-center mb-16">
+    <div class="w-full max-w-5xl mx-auto flex flex-col">
+      <TacticalContainer class="w-full">
+        <header class="flex flex-col md:flex-row md:justify-between md:items-start mb-6 gap-4">
+          <div class="w-full flex flex-col items-center text-center">
+            <h3 class="font-display text-2xl md:text-3xl font-bold mb-2 text-text-primary">
+              {data.title}
+            </h3>
+            
+            <div class="flex flex-wrap justify-center gap-2 mt-3">
+              {collectionType === 'spearfishing' && data.depth_meters && (
+                <HudBadge text={`${data.depth_meters}m DEPTH`} variant={badgeVariant} />
+              )}
+              {collectionType === 'spearfishing' && data.target_species && (
+                <HudBadge text={data.target_species.toUpperCase()} variant="default" class="hidden md:inline-flex opacity-70" />
+              )}
+              
+              {collectionType === 'gastronomy' && data.culinary_style && (
+                <HudBadge text={data.culinary_style.toUpperCase()} variant={badgeVariant} />
+              )}
+            </div>
+          </div>
+        </header>
+
+        <div class="relative w-full overflow-hidden flex items-center justify-center group">
+          <!-- Crop Marks (Cantoneiras) -->
+          <div class="absolute top-0 left-0 w-4 h-4 border-t border-l border-zinc-500/40 z-30 pointer-events-none transition-transform group-hover:-translate-x-1 group-hover:-translate-y-1"></div>
+          <div class="absolute top-0 right-0 w-4 h-4 border-t border-r border-zinc-500/40 z-30 pointer-events-none transition-transform group-hover:translate-x-1 group-hover:-translate-y-1"></div>
+          <div class="absolute bottom-0 left-0 w-4 h-4 border-b border-l border-zinc-500/40 z-30 pointer-events-none transition-transform group-hover:-translate-x-1 group-hover:translate-y-1"></div>
+          <div class="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-zinc-500/40 z-30 pointer-events-none transition-transform group-hover:translate-x-1 group-hover:translate-y-1"></div>
+
+          <div class="w-full rounded-sm overflow-hidden">
+            {data.media_type === 'youtube' && (
+              <LiteYouTube videoId={data.media_id} title={data.title} />
+            )}
+            
+            {data.media_type === 'vimeo' && (
+              <LiteVimeo videoId={data.media_id} title={data.title} />
+            )}
+            
+            {data.media_type === 'reel' && (
+              <div class="w-full max-w-sm mx-auto">
+                <ReelCard reelId={data.media_id} title={data.title} posterUrl={data.cover_image} />
+              </div>
+            )}
+            
+            {data.media_type === 'local' && (
+              <div class="aspect-video bg-zinc-900 border border-zinc-800 flex items-center justify-center hud-border">
+                <span class="font-mono text-zinc-500 text-sm">LOCAL MEDIA: {data.media_id}</span>
+              </div>
+            )}
+          </div>
+        </div>
+        
+        {data.description && (
+          <p class="mt-6 text-sm md:text-base leading-relaxed text-text-primary opacity-80 text-center max-w-4xl mx-auto">
+            {data.description}
+          </p>
+        )}
+      </TacticalContainer>
+    </div>
+  </div>
+)}

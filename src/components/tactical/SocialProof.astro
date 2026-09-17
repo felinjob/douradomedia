@@ -1,0 +1,46 @@
+---
+import TacticalContainer from './TacticalContainer.astro';
+import HudBadge from './HudBadge.astro';
+---
+
+<section class="py-24 px-4 md:px-8 bg-zinc-950 border-t border-zinc-900">
+  <div class="max-w-7xl mx-auto">
+    <header class="mb-16 text-center flex flex-col items-center">
+      <HudBadge text="TRUST & CLEARANCE" variant="default" class="mb-2" />
+      <h2 class="font-display text-3xl font-bold uppercase tracking-widest text-zinc-100">Verified By</h2>
+    </header>
+
+    <!-- Logos Grid Mockup -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-8 opacity-40 hover:opacity-100 transition-opacity duration-500 mb-20 items-center justify-items-center">
+      <div class="h-12 w-32 bg-zinc-800 rounded-sm flex items-center justify-center font-mono text-xs text-zinc-500">BRAND 01</div>
+      <div class="h-12 w-32 bg-zinc-800 rounded-sm flex items-center justify-center font-mono text-xs text-zinc-500">BRAND 02</div>
+      <div class="h-12 w-32 bg-zinc-800 rounded-sm flex items-center justify-center font-mono text-xs text-zinc-500">BRAND 03</div>
+      <div class="h-12 w-32 bg-zinc-800 rounded-sm flex items-center justify-center font-mono text-xs text-zinc-500">BRAND 04</div>
+    </div>
+
+    <!-- Testimonials -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <TacticalContainer class="bg-black border-zinc-900 p-8">
+        <p class="font-display text-lg text-zinc-300 italic mb-6 leading-relaxed">"A capacidade do Bruno de extrair poesia em ambientes onde o equipamento costuma falhar é absurda. Agilidade tática com olhar de cinema."</p>
+        <div class="flex items-center gap-4">
+          <div class="w-10 h-10 bg-zinc-800 rounded-full"></div>
+          <div>
+            <h4 class="font-bold text-zinc-100">Diretor de Marketing</h4>
+            <p class="text-xs font-mono text-zinc-500">BLUE OCEAN EXPEDITIONS</p>
+          </div>
+        </div>
+      </TacticalContainer>
+
+      <TacticalContainer class="bg-black border-zinc-900 p-8">
+        <p class="font-display text-lg text-zinc-300 italic mb-6 leading-relaxed">"Precisão. É a única palavra para definir a entrega do Dourado em nosso set de moda sob condições de luz natural extremas."</p>
+        <div class="flex items-center gap-4">
+          <div class="w-10 h-10 bg-zinc-800 rounded-full"></div>
+          <div>
+            <h4 class="font-bold text-zinc-100">Creative Director</h4>
+            <p class="text-xs font-mono text-zinc-500">MAISON SILVA</p>
+          </div>
+        </div>
+      </TacticalContainer>
+    </div>
+  </div>
+</section>
