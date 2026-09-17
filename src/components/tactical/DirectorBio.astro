@@ -8,7 +8,7 @@ import HudBadge from './HudBadge.astro';
     
     <!-- Image Column -->
     <div class="w-full md:w-1/2 relative group flex flex-col items-start">
-      <HudBadge text="DIRETOR & REALIZADOR" variant="default" class="mb-4" />
+      <HudBadge text="DIRETOR & REALIZADOR" variant="default" class="mb-4 self-start" />
       <div class="relative aspect-[3/4] max-w-md w-full hud-border overflow-hidden bg-zinc-900">
         <!-- Crop Marks -->
         <div class="absolute top-0 left-0 w-6 h-6 border-t border-l border-white/30 z-20 pointer-events-none transition-transform group-hover:-translate-x-1 group-hover:-translate-y-1"></div>
@@ -31,7 +31,7 @@ import HudBadge from './HudBadge.astro';
     </div>
 
     <!-- Text Column -->
-    <div class="w-full md:w-1/2 flex flex-col justify-center">
+    <div class="w-full md:w-1/2 flex flex-col justify-center items-start mt-6">
       <h2 class="font-display text-3xl md:text-5xl lg:text-6xl font-bold uppercase tracking-tighter text-white leading-tight mb-8">
         Da tensão da ação <br/>
         <span class="text-zinc-500">ao silêncio do detalhe</span>
