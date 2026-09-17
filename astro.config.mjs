@@ -1,8 +1,8 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
+import vercel from '@astrojs/vercel';
 import tailwindcss from '@tailwindcss/vite';
 import keystatic from '@keystatic/astro';
-import vercel from '@astrojs/vercel';
 import sitemap from '@astrojs/sitemap';
 import react from '@astrojs/react';
 

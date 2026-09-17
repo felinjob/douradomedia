@@ -97,28 +97,5 @@ export default config({
         }),
       },
     }),
-    gear: collection({
-      label: 'Gear (Equipamentos)',
-      slugField: 'name',
-      path: 'src/content/gear/*',
-      format: { data: 'frontmatter' },
-      schema: {
-        name: fields.slug({ name: { label: 'Nome / Modelo' } }),
-        category: fields.select({
-          label: 'Categoria',
-          options: [
-            { label: 'Câmera', value: 'camera' },
-            { label: 'Caixa Estanque', value: 'housing' },
-            { label: 'Lente', value: 'lens' },
-            { label: 'Drone', value: 'drone' },
-            { label: 'Iluminação', value: 'lighting' },
-          ],
-          defaultValue: 'camera',
-        }),
-        specs: fields.text({ label: 'Especificações Técnicas', multiline: true }),
-        depth_rating_meters: fields.number({ label: 'Classificação de Profundidade (m)' }),
-        in_use_since: fields.text({ label: 'Em uso desde' }),
-      },
-    }),
   },
 });
