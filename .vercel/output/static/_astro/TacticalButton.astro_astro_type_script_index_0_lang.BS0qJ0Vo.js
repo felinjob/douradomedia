@@ -1,1 +1,0 @@
-import{t as e}from"./haptics.C8BjSZet.js";var t=()=>{document.querySelectorAll(`.tactical-btn`).forEach(t=>{t.hasAttribute(`data-haptic`)||(t.setAttribute(`data-haptic`,`true`),t.addEventListener(`click`,()=>{e(50)}))})};document.addEventListener(`DOMContentLoaded`,t),document.addEventListener(`astro:page-load`,t);
